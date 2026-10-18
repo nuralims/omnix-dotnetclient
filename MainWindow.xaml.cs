@@ -389,6 +389,12 @@ namespace XiboClient
             settings.CefCommandLineArgs["disable-usb-keyboard-detect"] = "1";
             settings.CefCommandLineArgs["enable-media-stream"] = "1";
 
+            if (ApplicationSettings.Default.DisableChromium3dApis)
+            {
+                settings.CefCommandLineArgs["disable-3d-apis"] = "1";
+                settings.CefCommandLineArgs["disable-webgl"] = "1";
+            }
+
             if (!string.IsNullOrEmpty(ApplicationSettings.Default.CefLocale))
             {
                 settings.Locale = ApplicationSettings.Default.CefLocale;

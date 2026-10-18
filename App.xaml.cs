@@ -33,6 +33,22 @@ namespace XiboClient
             // Load settings
             ApplicationSettings.Default.Load();
 
+            // Limit WPF framerate if configured
+            if (ApplicationSettings.Default.LimitFramerate30Fps)
+            {
+                try
+                {
+                    System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty.OverrideMetadata(
+                        typeof(System.Windows.Media.Animation.Timeline),
+                        new FrameworkPropertyMetadata(30));
+                    Trace.WriteLine(new LogMessage("App", "LimitFramerate30Fps active: WPF DesiredFrameRate set to 30."), LogType.Info.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(new LogMessage("App", "Failed to set DesiredFrameRate. e = " + ex.Message), LogType.Info.ToString());
+                }
+            }
+
             // Add the Xibo Tracelistener
             Trace.Listeners.Add(new XiboTraceListener());
 

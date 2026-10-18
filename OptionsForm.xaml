@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:XiboClient"
         xmlns:Properties="clr-namespace:XiboClient.Properties" x:Class="XiboClient.OptionsForm"
         mc:Ignorable="d"
-        Title="Player Options" Height="450" Width="800" ResizeMode="CanMinimize">
+        Title="Omnix Player Options" Height="450" Width="800" ResizeMode="CanMinimize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="185*"/>
@@ -45,6 +45,18 @@
                     <TextBox x:Name="textBoxSplashScreenReplacement" HorizontalAlignment="Left" Height="35" Margin="83,176,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="467" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center"/>
                     <Label Content="Splash Screen" HorizontalAlignment="Left" Margin="54,176,0,0" VerticalAlignment="Top" Width="110" Height="34" FontSize="16" Grid.ColumnSpan="2" RenderTransformOrigin="0.519,-1.218"/>
                     <Button x:Name="buttonSplashScreenReplacement" Content="Browse" Grid.Column="1" HorizontalAlignment="Left" Margin="555,176,0,0" VerticalAlignment="Top" Width="110" Height="35" Click="Button_SplashScreenReplacement_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Performance">
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,90">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="91*"/>
+                        <ColumnDefinition Width="675*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Mini PC / Kiosk GPU Optimization" HorizontalAlignment="Left" Margin="83,15,0,0" VerticalAlignment="Top" Width="450" Height="30" FontSize="16" FontWeight="SemiBold" Grid.Column="1"/>
+                    <CheckBox x:Name="checkBoxFallbackToEdge" Content="Use WebView2 / Edge Engine (Native DWM compositor, low VRAM)" HorizontalAlignment="Left" Margin="83,55,0,0" VerticalAlignment="Top" Width="582" Grid.Column="1" FontSize="14" VerticalContentAlignment="Center" Cursor="Hand"/>
+                    <CheckBox x:Name="checkBoxLimitFramerate30Fps" Content="Limit Display Framerate to 30 FPS (Reduce GPU rendering cycles by ~50%)" HorizontalAlignment="Left" Margin="83,90,0,0" VerticalAlignment="Top" Width="582" Grid.Column="1" FontSize="14" VerticalContentAlignment="Center" Cursor="Hand"/>
+                    <CheckBox x:Name="checkBoxDisableChromium3dApis" Content="Disable WebGL and 3D APIs in Browser (Free GPU 3D pipeline for video)" HorizontalAlignment="Left" Margin="83,125,0,0" VerticalAlignment="Top" Width="582" Grid.Column="1" FontSize="14" VerticalContentAlignment="Center" Cursor="Hand"/>
                 </Grid>
             </TabItem>
             <TabItem Header="About">

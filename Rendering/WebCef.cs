@@ -58,6 +58,15 @@ namespace XiboClient.Rendering
             {
                 Name = "region_" + this.regionId
             };
+
+            if (ApplicationSettings.Default.LimitFramerate30Fps)
+            {
+                webView.BrowserSettings = new CefSharp.BrowserSettings
+                {
+                    WindowlessFrameRate = 30
+                };
+            }
+
             webView.RequestContext = GetSharedRequestContext();
             webView.LifeSpanHandler = new CefsharpLifespanHandler();
 

@@ -598,6 +598,8 @@ namespace XiboClient
         public bool ScreenShotRequested { get; set; }
         public bool FallbackToInternetExplorer { get; set; }
         public bool FallbackToEdge { get; set; }
+        public bool LimitFramerate30Fps { get; set; }
+        public bool DisableChromium3dApis { get; set; }
         public bool IsRecordGeoLocationOnProofOfPlay { get; set; }
         public bool IsAdspaceEnabled { get; set; }
 

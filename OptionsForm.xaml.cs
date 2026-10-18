@@ -95,6 +95,11 @@ namespace XiboClient
             // Appearance Tab
             textBoxSplashScreenReplacement.Text = ApplicationSettings.Default.SplashOverride;
 
+            // Performance Tab
+            checkBoxFallbackToEdge.IsChecked = ApplicationSettings.Default.FallbackToEdge;
+            checkBoxLimitFramerate30Fps.IsChecked = ApplicationSettings.Default.LimitFramerate30Fps;
+            checkBoxDisableChromium3dApis.IsChecked = ApplicationSettings.Default.DisableChromium3dApis;
+
             // Switch to TLS 2.1
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
@@ -204,6 +209,11 @@ namespace XiboClient
 
                 // Client settings
                 ApplicationSettings.Default.SplashOverride = textBoxSplashScreenReplacement.Text;
+
+                // Performance settings
+                ApplicationSettings.Default.FallbackToEdge = checkBoxFallbackToEdge.IsChecked == true;
+                ApplicationSettings.Default.LimitFramerate30Fps = checkBoxLimitFramerate30Fps.IsChecked == true;
+                ApplicationSettings.Default.DisableChromium3dApis = checkBoxDisableChromium3dApis.IsChecked == true;
 
                 // Commit these changes back to the user settings
                 ApplicationSettings.Default.Save();
@@ -332,6 +342,11 @@ namespace XiboClient
 
             // Client settings
             ApplicationSettings.Default.SplashOverride = textBoxSplashScreenReplacement.Text;
+
+            // Performance settings
+            ApplicationSettings.Default.FallbackToEdge = checkBoxFallbackToEdge.IsChecked == true;
+            ApplicationSettings.Default.LimitFramerate30Fps = checkBoxLimitFramerate30Fps.IsChecked == true;
+            ApplicationSettings.Default.DisableChromium3dApis = checkBoxDisableChromium3dApis.IsChecked == true;
 
             // Commit these changes back to the user settings
             ApplicationSettings.Default.Save();

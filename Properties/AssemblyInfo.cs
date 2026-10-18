@@ -5,12 +5,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Xibo Open Source Digital Signage")]
+[assembly: AssemblyTitle("Omnix Open Source Digital Signage")]
 [assembly: AssemblyDescription("Digital Signage Player")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Xibo Digital Signage")]
-[assembly: AssemblyProduct("Xibo")]
-[assembly: AssemblyCopyright("Copyright © Xibo Signage Ltd 2026")]
+[assembly: AssemblyCompany("Omnix")]
+[assembly: AssemblyProduct("Omnix Player")]
+[assembly: AssemblyCopyright("Copyright © Omnix / Xibo Signage Ltd 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

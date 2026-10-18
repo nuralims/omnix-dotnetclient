@@ -57,6 +57,8 @@
   <EmbeddedServerAllowWan>false</EmbeddedServerAllowWan>
   <ScreenShotSize>0</ScreenShotSize>
   <FallbackToEdge>false</FallbackToEdge>
+  <LimitFramerate30Fps>false</LimitFramerate30Fps>
+  <DisableChromium3dApis>false</DisableChromium3dApis>
   <FallbackToInternetExplorer>false</FallbackToInternetExplorer>
   <AggregationLevel>individual</AggregationLevel>
   <IsRecordGeoLocationOnProofOfPlay>false</IsRecordGeoLocationOnProofOfPlay>

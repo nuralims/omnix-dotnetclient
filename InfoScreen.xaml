@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XiboClient"
         mc:Ignorable="d"
-        Title="Player Information and Status" Height="715" Width="800">
+        Title="Omnix Player Information and Status" Height="715" Width="800">
     <Grid>
         <TextBox x:Name="textBoxSchedule" HorizontalAlignment="Left" Height="315" Margin="10,40,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" VerticalAlignment="Top" Width="385" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Visible"/>
         <TextBox x:Name="textBoxRequiredFiles" HorizontalAlignment="Left" Height="315" Margin="400,40,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" VerticalAlignment="Top" Width="385" VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True"/>

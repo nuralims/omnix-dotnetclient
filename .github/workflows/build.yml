@@ -1,0 +1,94 @@
+name: Build Windows Player (.NET 4.7.2)
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - 'olie-*'
+  pull_request:
+    branches:
+      - master
+      - develop
+      - 'olie-*'
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Build Configuration'
+        required: true
+        default: 'Release'
+        type: choice
+        options:
+          - 'Release'
+          - 'Debug'
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'x86'
+            name: 'x86'
+          - platform: 'Any CPU'
+            name: 'AnyCPU'
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup NuGet CLI
+        uses: nuget/setup-nuget@v2
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet Packages
+        run: nuget restore XiboClient.sln
+
+      - name: Build Player Solution
+        run: msbuild XiboClient.sln /p:Configuration=${{ github.event.inputs.configuration || 'Release' }} /p:Platform="${{ matrix.platform }}" /p:GenerateSerializationAssemblies=On /m
+
+      - name: Locate Output Directory
+        id: locate_output
+        shell: pwsh
+        run: |
+          $config = if ("${{ github.event.inputs.configuration }}" -ne "") { "${{ github.event.inputs.configuration }}" } else { "Release" }
+          $platform = "${{ matrix.platform }}"
+          
+          if ($platform -eq "x86") {
+            $outPath = "bin\x86\$config"
+          } else {
+            $outPath = "bin\$config"
+          }
+          
+          if (-Not (Test-Path $outPath)) {
+            Write-Error "Output directory $outPath not found!"
+            exit 1
+          }
+          
+          Write-Host "Found build output at: $outPath"
+          "outputPath=$outPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Verify Key Artifacts
+        shell: pwsh
+        run: |
+          $out = "${{ steps.locate_output.outputs.outputPath }}"
+          $required = @("XiboClient.exe", "XiboClient.XmlSerializers.dll", "Xibo.scr")
+          foreach ($file in $required) {
+            $p = Join-Path $out $file
+            if (Test-Path $p) {
+              Write-Host "✓ Found $file"
+            } else {
+              Write-Warning "⚠️ Warning: $file was not found in $out"
+            }
+          }
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: OmnixPlayer-${{ matrix.name }}-${{ github.sha }}
+          path: ${{ steps.locate_output.outputs.outputPath }}
+          retention-days: 14

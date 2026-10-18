@@ -111,18 +111,26 @@ namespace XiboClient.Rendering
                     userDataFolder += "\\";
                 }
 
+                string command = "--autoplay-policy=no-user-gesture-required";
+
+                if (ApplicationSettings.Default.DisableChromium3dApis)
+                {
+                    command += " --disable-3d-apis --disable-webgl";
+                }
+
+                if (ApplicationSettings.Default.LimitFramerate30Fps)
+                {
+                    command += " --disable-gpu-vsync --max-fps=30";
+                }
+
                 // NTLM/Auth Server White Lists.
                 if (!string.IsNullOrEmpty(ApplicationSettings.Default.AuthServerWhitelist))
                 {
-                    string command = "--auth-server-whitelist " + ApplicationSettings.Default.AuthServerWhitelist;
+                    command += " --auth-server-whitelist " + ApplicationSettings.Default.AuthServerWhitelist;
                     command += " --auth-negotiate-delegate-whitelist " + ApplicationSettings.Default.AuthServerWhitelist;
+                }
 
-                    environmentOptions = new CoreWebView2EnvironmentOptions(command);
-                }
-                else
-                {
-                    environmentOptions = new CoreWebView2EnvironmentOptions();
-                }
+                environmentOptions = new CoreWebView2EnvironmentOptions(command);
 
                 // Single Sign On?
                 if (ApplicationSettings.Default.AllowSingleSignOnUsingOSPrimaryAccount)
