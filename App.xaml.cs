@@ -75,7 +75,7 @@ namespace XiboClient
                     }
                     else
                     {
-                        if (string.IsNullOrWhiteSpace(ApplicationSettings.Instance.ServerUri))
+                        if (string.IsNullOrWhiteSpace(ApplicationSettings.Default.ServerUri))
                         {
                             shouldQuit = true;
                             RunSettings();
@@ -89,7 +89,7 @@ namespace XiboClient
                 else
                 {
                     // If ServerUri is not configured, automatically show Options form first
-                    if (string.IsNullOrWhiteSpace(ApplicationSettings.Instance.ServerUri))
+                    if (string.IsNullOrWhiteSpace(ApplicationSettings.Default.ServerUri))
                     {
                         shouldQuit = true;
                         RunSettings();
