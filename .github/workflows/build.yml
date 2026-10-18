@@ -76,7 +76,7 @@ jobs:
         shell: pwsh
         run: |
           $out = "${{ steps.locate_output.outputs.outputPath }}"
-          $required = @("XiboClient.exe", "XiboClient.XmlSerializers.dll", "Xibo.scr")
+          $required = @("OmnixPlayer.exe", "OmnixPlayer.XmlSerializers.dll", "Xibo.scr")
           foreach ($file in $required) {
             $p = Join-Path $out $file
             if (Test-Path $p) {
