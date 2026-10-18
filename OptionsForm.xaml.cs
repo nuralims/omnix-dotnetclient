@@ -311,10 +311,12 @@ namespace XiboClient
             }
         }
 
+        public bool LaunchPlayerRequested { get; private set; } = false;
+
         private void Button_LaunchPlayer_Click(object sender, RoutedEventArgs e)
         {
+            this.LaunchPlayerRequested = true;
             Close();
-            Process.Start(Process.GetCurrentProcess().MainModule.FileName);
         }
 
         private async void Button_UseCode_Click(object sender, RoutedEventArgs e)
@@ -442,8 +444,8 @@ namespace XiboClient
                     Dispatcher.Invoke(new System.Action(
                         () =>
                         {
+                            this.LaunchPlayerRequested = true;
                             Close();
-                            Process.Start(Process.GetCurrentProcess().MainModule.FileName);
                         })
                         );
                 }

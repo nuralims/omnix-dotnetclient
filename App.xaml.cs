@@ -55,49 +55,44 @@ namespace XiboClient
             bool shouldQuit = false;
             try
             {
+                bool runClient = false;
+                bool screenSaver = false;
+
                 // Check for any passed arguments
                 if (e.Args.Length > 0)
                 {
                     string firstArg = e.Args[0].ToString().ToLower().Trim();
-                    if (firstArg == "o" || firstArg == "-o" || firstArg == "--options" || firstArg == "/o" || firstArg == "options" || firstArg == "/c")
-                    {
-                        shouldQuit = true;
-                        RunSettings();
-                    }
-                    else if (firstArg == "/p")
+                    if (firstArg == "/p")
                     {
                         // Preview the screen saver - do nothing
+                        return;
                     }
                     else if (firstArg == "/s")
                     {
-                        // Show the screen saver
-                        RunClient(true);
+                        // Run screensaver
+                        runClient = true;
+                        screenSaver = true;
+                    }
+                    else if (firstArg == "/player" || firstArg == "-player" || firstArg == "--player" || firstArg == "player")
+                    {
+                        // Direct player launch without showing options first
+                        runClient = true;
                     }
                     else
                     {
-                        if (string.IsNullOrWhiteSpace(ApplicationSettings.Default.ServerUri))
-                        {
-                            shouldQuit = true;
-                            RunSettings();
-                        }
-                        else
-                        {
-                            RunClient(false);
-                        }
+                        // Any other arg or "o" / "/c": show Settings first
+                        runClient = RunSettings();
                     }
                 }
                 else
                 {
-                    // If ServerUri is not configured, automatically show Options form first
-                    if (string.IsNullOrWhiteSpace(ApplicationSettings.Default.ServerUri))
-                    {
-                        shouldQuit = true;
-                        RunSettings();
-                    }
-                    else
-                    {
-                        RunClient(false);
-                    }
+                    // By default when opening the executable directly: ALWAYS open Settings first
+                    runClient = RunSettings();
+                }
+
+                if (runClient)
+                {
+                    RunClient(screenSaver);
                 }
             }
             catch (Exception ex)
@@ -140,11 +135,13 @@ namespace XiboClient
         /// <summary>
         /// Run the Settings Window
         /// </summary>
-        private static void RunSettings()
+        /// <returns>True if the player should be launched immediately</returns>
+        private static bool RunSettings()
         {
             // If we are showing the options form, enable visual styles
             OptionsForm windowMain = new OptionsForm();
             windowMain.ShowDialog();
+            return windowMain.LaunchPlayerRequested;
         }
 
         /// <summary>

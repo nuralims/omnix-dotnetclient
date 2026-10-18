@@ -76,7 +76,7 @@ jobs:
         shell: pwsh
         run: |
           $out = "${{ steps.locate_output.outputs.outputPath }}"
-          $required = @("OmnixPlayer.exe", "OmnixPlayer.XmlSerializers.dll", "Xibo.scr", "OmnixPlayer-Options.bat")
+          $required = @("OmnixPlayer.exe", "OmnixPlayer.XmlSerializers.dll", "Xibo.scr")
           foreach ($file in $required) {
             $p = Join-Path $out $file
             if (Test-Path $p) {
@@ -86,7 +86,58 @@ jobs:
             }
           }
 
-      - name: Upload Build Artifacts
+      - name: Build MSI Installer
+        id: build_msi
+        shell: pwsh
+        run: |
+          $wixBin = "${env:WIX}bin"
+          if (-Not (Test-Path "$wixBin\candle.exe")) {
+            Write-Warning "WiX toolset not found at $wixBin, trying PATH..."
+            $candle = (Get-Command "candle.exe" -ErrorAction SilentlyContinue)
+            if ($candle) {
+              $wixBin = Split-Path $candle.Source
+            } else {
+              Write-Error "WiX Toolset (candle.exe) was not found!"
+              exit 1
+            }
+          }
+
+          $outPath = (Resolve-Path "${{ steps.locate_output.outputs.outputPath }}").Path
+          $msiDir = "installer-output"
+          New-Item -ItemType Directory -Force -Path $msiDir | Out-Null
+          
+          $msiName = "omnix-player-v4-R407.2-win32-${{ matrix.name }}.msi"
+          $msiPath = Join-Path (Resolve-Path $msiDir).Path $msiName
+          
+          Write-Host "Harvesting files from: $outPath"
+          & "$wixBin\heat.exe" dir "$outPath" -cg OmnixFiles -dr INSTALLFOLDER -scom -sreg -sfrag -srd -var var.SourceDir -out "installer\OmnixFiles.wxs"
+          
+          Write-Host "Compiling WiX sources..."
+          $arch = if ("${{ matrix.name }}" -eq "x86") { "x86" } else { "x64" }
+          & "$wixBin\candle.exe" -arch $arch -dPlatform=$arch -dSourceDir="$outPath" installer\Product.wxs installer\OmnixFiles.wxs -out "installer\"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          
+          Write-Host "Linking MSI package: $msiPath"
+          & "$wixBin\light.exe" -sice:ICE38 -sice:ICE64 -sice:ICE91 installer\Product.wixobj installer\OmnixFiles.wixobj -out $msiPath
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          
+          if (-Not (Test-Path $msiPath)) {
+            Write-Error "MSI file was not created!"
+            exit 1
+          }
+          
+          Write-Host "✓ Successfully generated MSI: $msiPath"
+          "msiPath=$msiPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "msiName=$msiName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Upload MSI Installer Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: omnix-player-v4-R407.2-win32-${{ matrix.name }}.msi
+          path: installer-output/*.msi
+          retention-days: 14
+
+      - name: Upload Build Artifacts (Raw Files)
         uses: actions/upload-artifact@v4
         with:
           name: OmnixPlayer-${{ matrix.name }}-${{ github.sha }}
