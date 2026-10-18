@@ -58,41 +58,46 @@ namespace XiboClient
                 // Check for any passed arguments
                 if (e.Args.Length > 0)
                 {
-                    if (e.Args[0].ToString() == "o")
+                    string firstArg = e.Args[0].ToString().ToLower().Trim();
+                    if (firstArg == "o" || firstArg == "-o" || firstArg == "--options" || firstArg == "/o" || firstArg == "options" || firstArg == "/c")
+                    {
+                        shouldQuit = true;
+                        RunSettings();
+                    }
+                    else if (firstArg == "/p")
+                    {
+                        // Preview the screen saver - do nothing
+                    }
+                    else if (firstArg == "/s")
+                    {
+                        // Show the screen saver
+                        RunClient(true);
+                    }
+                    else
+                    {
+                        if (string.IsNullOrWhiteSpace(ApplicationSettings.Instance.ServerUri))
+                        {
+                            shouldQuit = true;
+                            RunSettings();
+                        }
+                        else
+                        {
+                            RunClient(false);
+                        }
+                    }
+                }
+                else
+                {
+                    // If ServerUri is not configured, automatically show Options form first
+                    if (string.IsNullOrWhiteSpace(ApplicationSettings.Instance.ServerUri))
                     {
                         shouldQuit = true;
                         RunSettings();
                     }
                     else
                     {
-                        switch (e.Args[0].ToLower().Trim().Substring(0, 2))
-                        {
-                            // Preview the screen saver
-                            case "/p":
-                                // Do nothing
-                                break;
-
-                            // Show the screen saver
-                            case "/s":
-                                RunClient(true);
-                                break;
-
-                            // Configure the screesaver's settings
-                            case "/c":
-                                // Show the settings form
-                                RunSettings();
-                                break;
-
-                            // Show the screen saver
-                            default:
-                                RunClient(true);
-                                break;
-                        }
+                        RunClient(false);
                     }
-                }
-                else
-                {
-                    RunClient(false);
                 }
             }
             catch (Exception ex)
